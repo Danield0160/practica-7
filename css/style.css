@@ -1,1 +1,6 @@
- 
+.valido{
+    background-color: green;
+}
+.no_valido{
+    background-color: red;
+}
