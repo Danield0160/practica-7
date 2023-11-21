@@ -1,9 +1,21 @@
 class Formulario {
     comprobantes = {
-        "nombre": /^[A-Z][a-z]*/,
+        "nombre": /^[A-Z][a-z]+/,
         "apellidos": /^[A-Z][a-z]+\s[A-Z][a-z]+/,
         "dni": /^[A-Z][1-9]{7}[A-Z]{1}$|^[1-9]{8}[A-Z]{1}$/,
-        "nacimiento": /$$$$/,
+        "nacimiento": {
+            test: function (texto) {
+                if(!/^\d{2}\/\d{2}\/\d{4}$/.test(texto)){
+                    return false}
+                texto = texto.split("/")
+                let dia = new Date(texto[1] + "/" + texto[0] + "/" + texto[2])
+                if(Boolean(dia.getDate()) && (dia.getDate() == Number(texto[0]))){
+                    return dia < new Date()
+                }else{
+                    return false
+                }
+            }
+        },
         "postal": /^[1-9]{5}$/,
         "email": /^[A-z.1-9]+@[A-z.1-9]+\.[A-z]{1,3}$/,
         "fijo": /^[89][0-9]{8}$/,
@@ -22,6 +34,7 @@ class Formulario {
             }.bind(this))
         }
     }
+    // TODO: generar objeto para test password y password_repeat
 
     comprobarCampo(texto, id_formulario) {
         if (this.comprobantes[id_formulario].test(texto)) {
@@ -31,11 +44,11 @@ class Formulario {
             document.getElementById(id_formulario).classList.add("no_valido")
             document.getElementById(id_formulario).classList.remove("valido")
         }
-        if(["password","password_repeat"].includes(id_formulario)){
-            if(document.getElementById("password_repeat").value != document.getElementById("password").value){
+        if (["password", "password_repeat"].includes(id_formulario)) {
+            if (document.getElementById("password_repeat").value != document.getElementById("password").value) {
                 document.getElementById("password_repeat").classList.remove("valido")
                 document.getElementById("password_repeat").classList.add("no_valido")
-            }else{
+            } else {
                 document.getElementById("password_repeat").classList.remove("no_valido")
                 document.getElementById("password_repeat").classList.add("valido")
             }
@@ -44,3 +57,4 @@ class Formulario {
 }
 
 new Formulario()
+
