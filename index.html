@@ -9,60 +9,60 @@
 </head>
 
 <body>
-   <form action="" id="formulario">
-
+   <form action="" id="formulario" onsubmit="return false">
+      
       <p>Nombre</p>
       <input type="text" id="nombre">
       <span>Tiene que se una palabra que empiece por mayuscula</span>
 
       <p>Apellidos</p>
       <input type="text" id="apellidos">
-      <span>hola</span>
+      <span>tiene que ser dos palabras empezadas por mayuscula</span>
 
       <p>DNI</p>
       <input type="text" id="dni">
-      <span>hola</span>
+      <span>tiene que ser 8 numeros seguidos de una mayuscula o 7 numeros precedido y seguido de una mayuscula</span>
 
       <p>Fecha de nacimiento</p>
       <input type="text" id="nacimiento">
-      <span>hola</span>
+      <span>tiene que tener formato dd/mm/aaaa</span>
 
       <p>Codigo postal</p>
       <input type="text" id="postal">
-      <span>hola</span>
+      <span>tiene que ser 5 numeros</span>
 
       <p>E-mail</p>
       <input type="text" id="email">
-      <span>hola</span>
+      <span>tiene que ser un email valido</span>
 
       <p>Telefono Fijo</p>
       <input type="text" id="fijo">
-      <span>hola</span>
+      <span>tiene que empezar en 9</span>
 
       <p>Telefono movil</p>
       <input type="text" id="movil">
-      <span>hola</span>
+      <span>tiene que empezar en 6</span>
 
       <p>IBAN</p>
       <input type="text" id="iban">
-      <span>hola</span>
+      <span>tiene que empezar en ES y seguir con 22 letras</span>
 
       <p>Tarjeta de credito</p>
       <input type="text" id="credito">
-      <span>hola</span>
+      <span>tiene que tener 12 numeros</span>
 
       <p>Contraseña</p>
-      <input type="text" id="password">
-      <span>hola</span>
+      <input type="password" id="password" >
+      <span>tiene que tener 12 caracteres, con minimo 1 letra, un numero, y un caracter especial</span>
 
       <p>repetir contraseña</p>
-      <input type="text" id="password_repeat">
-      <span>hola</span>
+      <input type="password" id="password_repeat">
+      <span>tiene que ser igual que la contraseña</span>
 
-
+      <br>
+      <button id="guardar">Guardar</button>
+      <button id="recuperar">Recuperar</button>
    </form>
-   <button id="guardar">Guardar</button>
-   <button id="recuperar">Recuperar</button>
 </body>
 <script src="js/script.js"></script>
 </html>

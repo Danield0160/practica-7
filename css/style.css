@@ -1,14 +1,16 @@
 .valido{
-    background-color: green;
+    background-color: rgb(126, 243, 126);
 }
 .no_valido{
-    background-color: red;
+    background-color: rgb(252, 133, 133);
 }
 
 form{
     border: 2px solid black;
     padding: 20px;
     border-radius: 10px;
+    width: 600px;
+    margin: auto;
     background-color: rgb(230, 226, 221);
 }
 
@@ -19,6 +21,7 @@ input{
     border-radius: 10px;
     width: 300px;
     margin-top: 0px;
+    padding: 5px;
 }
 
 span{ 

@@ -25,28 +25,28 @@ class Formulario {
         "iban": /^ES[0-9]{22}$/,
         "credito": /^[0-9]{12}$/,
 
+        "pass": /(?=.*[0-9])(?=.*[A-z])(?=.*[!-\/:-@\[-_\{-~]).{12,}/,
         "password": {
             test:
                 function (texto) {
                     this.comprobarCampo(document.getElementById("password_repeat").value, "password_repeat")
-                    return /(?=.*[0-9])(?=.*[A-z])(?=.*[!-\/:-@\[-_\{-~]).{6,}/.test(texto)
+                    return this.comprobantes["pass"].test(texto)
                 }.bind(this)
         },
 
         "password_repeat": {
             test:
                 function (texto) {
-                    if (!/(?=.*[0-9])(?=.*[A-z])(?=.*[!-\/:-@\[-_\{-~]).{6,}/.test(texto)) {
+                    if (!this.comprobantes["pass"].test(texto)) {
                         return false
                     } else {
                         return document.getElementById("password").value == texto
                     }
-                }
+                }.bind(this)
         }
     }
 
     constructor() {
-
         let hijos = [...document.getElementById("formulario").querySelectorAll("input")]
         for (let hijo of hijos) {
             hijo.addEventListener("input", function (e) {
@@ -62,9 +62,11 @@ class Formulario {
         if (this.comprobantes[id_formulario].test(texto)) {
             document.getElementById(id_formulario).classList.add("valido")
             document.getElementById(id_formulario).classList.remove("no_valido")
+            return true
         } else {
             document.getElementById(id_formulario).classList.add("no_valido")
             document.getElementById(id_formulario).classList.remove("valido")
+            return false
         }
     }
 
@@ -73,13 +75,16 @@ class Formulario {
         let hijos = [...document.getElementById("formulario").querySelectorAll("input")]
         let comprobacionTodos = true
         hijos.forEach(function (hijo) {
-            if (!hijo.classList.contains("valido")) {
+            if (!this.comprobarCampo(hijo.value, hijo.id)) {
                 comprobacionTodos = false
             }
-        })
-        hijos.forEach(function (hijo) {
-            localStorage[hijo.id] = hijo.value
-        })
+        }.bind(this))
+        if (comprobacionTodos) {
+            hijos.forEach(function (hijo) {
+                guardadoJson[hijo.id] = hijo.value
+                localStorage[hijo.id] = hijo.value
+            })
+        }
     }
 
     recuperar() {
@@ -87,11 +92,15 @@ class Formulario {
             for (let i = 0; i < localStorage.length; i++) {
                 let item = localStorage.key(i)
                 document.getElementById(item).value = localStorage[item]
+                guardadoJson[item] = localStorage[item]
                 this.comprobarCampo(localStorage[item], item)
             }
         }
     }
 }
 
-new Formulario()
+
+class Json {}
+guardadoJson = new Json()
+formulario = new Formulario()
 
