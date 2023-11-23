@@ -1,4 +1,6 @@
+//objeto encargado de detectar errores en el formulario html
 class Formulario {
+    //dicionario con las comprobaciones del formulario
     comprobantes = {
         "nombre": /^[A-Z][a-z]+$/,
         "apellidos": /^[A-Z][a-z]+\s[A-Z][a-z]+$/,
@@ -45,7 +47,7 @@ class Formulario {
                 }.bind(this)
         }
     }
-
+    // inicar la escucha de los inputs y poner funcionalidad en los botnoes
     constructor() {
         let hijos = [...document.getElementById("formulario").querySelectorAll("input")]
         for (let hijo of hijos) {
@@ -58,6 +60,7 @@ class Formulario {
         document.getElementById("recuperar").onclick = function () { this.recuperar() }.bind(this)
     }
 
+    //comprueba si un campo esta bien, y lo colorea en base a ello
     comprobarCampo(texto, id_formulario) {
         if (this.comprobantes[id_formulario].test(texto)) {
             document.getElementById(id_formulario).classList.add("valido")
@@ -70,7 +73,7 @@ class Formulario {
         }
     }
 
-
+    // guarda los datos en el localstorage
     guardar() {
         let hijos = [...document.getElementById("formulario").querySelectorAll("input")]
         let comprobacionTodos = true
@@ -87,6 +90,7 @@ class Formulario {
         }
     }
 
+    // pone los datos del localstorage en el formulario html y los comprueba
     recuperar() {
         if (localStorage) {
             for (let i = 0; i < localStorage.length; i++) {
