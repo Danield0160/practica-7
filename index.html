@@ -10,7 +10,7 @@
 
 <body>
    <form action="" id="formulario" onsubmit="return false">
-      
+
       <p>Nombre</p>
       <input type="text" id="nombre">
       <span>Tiene que se una palabra que empiece por mayuscula</span>
@@ -45,24 +45,26 @@
 
       <p>IBAN</p>
       <input type="text" id="iban">
-      <span>tiene que empezar en ES y seguir con 22 letras</span>
+      <span>tiene que ser VISA, tiene que empezar en ES y seguir con 22 letras</span>
 
       <p>Tarjeta de credito</p>
       <input type="text" id="credito">
       <span>tiene que tener 12 numeros</span>
 
       <p>Contraseña</p>
-      <input type="password" id="password" >
+      <input type="password" id="password">
       <span>tiene que tener 12 caracteres, con minimo 1 letra, un numero, y un caracter especial</span>
 
       <p>repetir contraseña</p>
       <input type="password" id="password_repeat">
-      <span>tiene que ser igual que la contraseña</span>
+      <span>tiene que ser igual que la contraseña y valida</span>
 
-      <br>
-      <button id="guardar">Guardar</button>
-      <button id="recuperar">Recuperar</button>
+      <div id="botones">
+         <button id="guardar">Guardar</button>
+         <button id="recuperar">Recuperar</button>
+      </div>
    </form>
 </body>
 <script src="js/script.js"></script>
+
 </html>

@@ -2,7 +2,7 @@
 class Formulario {
     //dicionario con las comprobaciones del formulario
     comprobantes = {
-        "nombre": /^[A-Z][a-z]+$/,
+        "nombre": /^([A-Z][a-z]+\s?){1,2}$/,
         "apellidos": /^[A-Z][a-z]+\s[A-Z][a-z]+$/,
         "dni": /^[a-zA-z][1-9]{7}[A-Z]{1}$|^[1-9]{8}[A-Z]{1}$/,
         "nacimiento": {
@@ -83,28 +83,28 @@ class Formulario {
             }
         }.bind(this))
         if (comprobacionTodos) {
+            let json = {}
             hijos.forEach(function (hijo) {
-                guardadoJson[hijo.id] = hijo.value
-                localStorage[hijo.id] = hijo.value
+                json[hijo.id] = hijo.value
             })
+            localStorage["persona"] = JSON.stringify(json)
         }
     }
 
     // pone los datos del localstorage en el formulario html y los comprueba
     recuperar() {
-        if (localStorage) {
-            for (let i = 0; i < localStorage.length; i++) {
-                let item = localStorage.key(i)
-                document.getElementById(item).value = localStorage[item]
-                guardadoJson[item] = localStorage[item]
-                this.comprobarCampo(localStorage[item], item)
+        if (localStorage.persona) {
+            let datos = JSON.parse(localStorage.persona)
+            for (let dato of Object.keys(datos)) {
+                document.getElementById(dato).value = datos[dato]
+                this.comprobarCampo(datos[dato], dato)
             }
         }
     }
 }
 
 
-class Json {}
+class Json { }
 guardadoJson = new Json()
 formulario = new Formulario()
 
