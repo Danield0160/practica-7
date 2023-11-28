@@ -8,7 +8,7 @@ class Formulario {
         "nacimiento": {
             test:
                 function (texto) {
-                    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(texto)) {
+                    if (! /^\d{2}\/\d{2}\/\d{4}$/.test(texto)) {
                         return false
                     }
                     let textoLista = texto.split("/")
@@ -21,7 +21,7 @@ class Formulario {
                 }
         },
         "postal": /^[0-9]{5}$/,
-        "email": /^[A-z.1-9]+@[A-z.1-9]+\.[A-z]{1,3}$/,
+        "email": /^[A-z.0-9]+@[A-z.0-9]+\.[A-z]{1,3}$/,
         "fijo": /^[89][0-9]{8}$/,
         "movil": /^[67][0-9]{8}$/,
         "iban": /^ES[0-9]{22}$/,
@@ -103,8 +103,98 @@ class Formulario {
     }
 }
 
-
-class Json { }
-guardadoJson = new Json()
 formulario = new Formulario()
+
+
+
+
+
+
+
+
+
+
+
+class Particula {
+    particulaPermitida = true
+    coloresParticulas = ["red", "blue", "green", "yellow"]
+
+    constructor(modoParticulas, icono) {
+        this.iconoParticula = icono
+
+        if (modoParticulas == "Tiempo") {
+            this.iniciarContadorTiempo()
+        }
+
+        document.addEventListener('mousemove', function (e) {
+            if (this.particulaPermitida) {
+                this.particulaPermitida = false
+                this.crearParticula(e.clientX, e.clientY)
+            }
+        }.bind(this));
+    }
+
+
+    iniciarContadorTiempo() {
+        setInterval(function () { this.particulaPermitida = true }.bind(this), 100)
+    }
+
+
+    crearParticula(ejeX, ejeY) {
+        let particula = document.createElement("i")
+        particula.className = this.iconoParticula + " particula"
+
+        particula.style.setProperty("top", ejeY + 10 + "px")
+        particula.style.setProperty("left", ejeX + "px")
+        particula.style.setProperty("color", this.coloresParticulas[getRandomInt(this.coloresParticulas.length)])
+        document.getElementById("contenedorParticulas").appendChild(particula)
+
+        setTimeout(function () { document.getElementById("contenedorParticulas").removeChild(particula) }, 1500)
+        setTimeout(function () {
+            particula.style.setProperty("top", ejeY + 150 + "px")
+            let rotacion = `${getRandomInt(2)} ${getRandomInt(2)} ${getRandomInt(2)} 240deg`
+            particula.style.setProperty("rotate", rotacion)
+        }.bind(this), 10)
+    }
+}
+new Particula("Tiempo", "fa fa-star fa-2xs")
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
+
+
+function abrirCarta() {
+    //abrir sobre
+    document.getElementById("frontal4").style.setProperty("rotate", "1 0 0 180deg")
+
+    setTimeout(function () {
+        document.getElementById("sobre").style.setProperty("opacity", "0")
+    }, 1700)
+
+    setTimeout(function () {
+        Array.from(document.getElementsByClassName("elementoCarta")).forEach(function (elemento) {
+            console.log(elemento)
+            elemento.style.setProperty("transform", "translateY(500px)")
+            if (elemento.id == "frontal4") {
+                document.getElementById("frontal4").style.zIndex = -10
+                elemento.style.setProperty("transform", "translateY(-500px)")
+            }
+        })
+    }, 1700)
+
+    //desenrrollar
+    setTimeout(function () {
+        document.getElementById("pliegue_arriba").style.setProperty("rotate", "0 0 0 0deg")
+    }, 2200)
+    setTimeout(function () {
+        document.getElementById("pliegue_abajo").style.setProperty("rotate", "0 0 0 0deg")
+
+    }, 3200)
+}
+
+document.getElementById("carta").onclick = abrirCarta
+
+
 
