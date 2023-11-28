@@ -103,24 +103,26 @@ class Formulario {
     }
 }
 
-
-var ourRequest = new XMLHttpRequest();
-ourRequest.open('GET', 'http://danieldawdns.ddns.net/datos.json');
-
-ourRequest.onload = function () {
-    if (ourRequest.status >= 200 && ourRequest.status < 400) {
-        var ourData = JSON.parse(ourRequest.responseText);
-        console.log(ourData);
-    } else {
-        console.log("We connected to the server, but it returned an error.");
+function cogerJsonDelServer(){
+    for (const iterator of ['http://danieldawdns.ddns.net/datos.json',"localhost/datos.json"]) {
+        var ourRequest = new XMLHttpRequest();
+        ourRequest.open('GET', 'http://danieldawdns.ddns.net/datos.json');
+        ourRequest.withCredentials = true;
+        ourRequest.onload = function () {
+            if (ourRequest.status >= 200 && ourRequest.status < 400) {
+                var ourData = JSON.parse(ourRequest.responseText);
+                console.log(ourData);
+                return
+            } else {
+                console.log("We connected to the server, but it returned an error.");
+            }
+        };
+        ourRequest.onerror = function () {
+            console.log("Connection error");
+        };
+        ourRequest.send();
     }
-};
-ourRequest.onerror = function () {
-    console.log("Connection error");
-};
-ourRequest.send();
+}
 
-class Json { }
-guardadoJson = new Json()
 formulario = new Formulario()
 
