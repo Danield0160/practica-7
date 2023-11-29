@@ -102,12 +102,15 @@ class Formulario {
         }
     }
 }
+formulario = new Formulario()
 
-function cogerJsonDelServer(){
-    for (const iterator of ['http://danieldawdns.ddns.net/datos.json',"localhost/datos.json"]) {
+
+
+function cogerDatosDelServer(urls) {
+    for (const iterator of urls) {
         var ourRequest = new XMLHttpRequest();
-        ourRequest.open('GET', 'http://danieldawdns.ddns.net/datos.json');
-        ourRequest.withCredentials = true;
+        ourRequest.open('GET', iterator);
+
         ourRequest.onload = function () {
             if (ourRequest.status >= 200 && ourRequest.status < 400) {
                 var ourData = JSON.parse(ourRequest.responseText);
@@ -117,12 +120,15 @@ function cogerJsonDelServer(){
                 console.log("We connected to the server, but it returned an error.");
             }
         };
+
         ourRequest.onerror = function () {
             console.log("Connection error");
         };
+
         ourRequest.send();
     }
 }
+document.getElementById("recuperarJson").onclick = function(){ cogerDatosDelServer(['http://danieldawdns.ddns.net/datos.json', "http://localhost/datos.json"])}
+document.getElementById("recuperarPhp").onclick = function(){ cogerDatosDelServer(['http://danieldawdns.ddns.net/', "http://localhost/"])}
 
-formulario = new Formulario()
 
