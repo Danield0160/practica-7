@@ -92,12 +92,12 @@ class Formulario {
     }
 
     // pone los datos del localstorage en el formulario html y los comprueba
-    recuperar() {
-        if (localStorage.persona) {
-            let datos = JSON.parse(localStorage.persona)
-            for (let dato of Object.keys(datos)) {
-                document.getElementById(dato).value = datos[dato]
-                this.comprobarCampo(datos[dato], dato)
+    recuperar(datos = localStorage.persona) {
+        if (datos) {
+            let datosjson = JSON.parse(datos)
+            for (let dato of Object.keys(datosjson)) {
+                document.getElementById(dato).value = datosjson[dato]
+                this.comprobarCampo(datosjson[dato], dato)
             }
         }
     }
@@ -107,15 +107,17 @@ formulario = new Formulario()
 
 
 function cogerDatosDelServer(urls) {
+    let hecho = false
     for (const iterator of urls) {
-        var ourRequest = new XMLHttpRequest();
-        ourRequest.open('GET', iterator);
+        let ourRequest = new XMLHttpRequest();
+        ourRequest.open('GET', iterator, true);
 
         ourRequest.onload = function () {
             if (ourRequest.status >= 200 && ourRequest.status < 400) {
-                var ourData = JSON.parse(ourRequest.responseText);
-                console.log(ourData);
-                return
+                if (!hecho) {
+                    formulario.recuperar(ourRequest.responseText);
+                    hecho = true
+                }
             } else {
                 console.log("We connected to the server, but it returned an error.");
             }
@@ -127,8 +129,11 @@ function cogerDatosDelServer(urls) {
 
         ourRequest.send();
     }
+
 }
-document.getElementById("recuperarJson").onclick = function(){ cogerDatosDelServer(['http://danieldawdns.ddns.net/datos.json', "http://localhost/datos.json"])}
-document.getElementById("recuperarPhp").onclick = function(){ cogerDatosDelServer(['http://danieldawdns.ddns.net/', "http://localhost/"])}
+document.getElementById("recuperarJson").onclick = function () {
+    cogerDatosDelServer(['http://danieldawdns.ddns.net/datos.json', "http://localhost/datos.json"])
+}
+document.getElementById("recuperarPhp").onclick = function () { cogerDatosDelServer(['http://danieldawdns.ddns.net/', "http://localhost/"]) }
 
 
