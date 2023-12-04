@@ -76,7 +76,8 @@ class Formulario {
 
     // guarda los datos en el localstorage
     guardar() {
-        let hijos = [...document.getElementById("formulario").querySelectorAll("input")]
+        let hijos = [...document.getElementById("formulario").querySelectorAll("#formulario>input")]
+        console.log(hijos)
         let comprobacionTodos = true
         hijos.forEach(function (hijo) {
             if (!this.comprobarCampo(hijo.value, hijo.id)) {
@@ -157,6 +158,45 @@ function cogerUsuarioDelBBDD(urls, dni) {
     }
 }
 
+function guardarUsuarioEnBBDD(url) {
+    let hijos = [...document.getElementById("formulario").querySelectorAll("#formulario>input")]
+    let params = ""
+    for (const hijo of hijos) {
+        params += hijo.id + "=" + hijo.value + "&"
+    }
+    params = params.slice(0, -1)
+    console.log(params)
+
+    let xhr = new XMLHttpRequest();
+
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');//add an HTTP header with setRequestHeader(). Specify the data you want to send in the send() method:
+
+    xhr.onload = function () {
+        console.log(this.responseText);
+    }
+
+    xhr.send(params);
+
+}
+
+
+urls = {
+    casa: {
+        json: 'http://danieldawdns.ddns.net/datos.json',
+        php: 'http://danieldawdns.ddns.net/',
+        bd: 'http://danieldawdns.ddns.net/bbdd.php'
+    },
+    clase: {
+
+    },
+    local: {
+        json: "http://localhost/datos.json",
+        php: "http://localhost/",
+        bd: "http://localhost/bbdd.php"
+    }
+}
+
 
 
 document.getElementById("recuperarJson").onclick = function () {
@@ -167,5 +207,8 @@ document.getElementById("recuperarPhp").onclick = function () {
 }
 
 document.getElementById("recuperarBBDD").onclick = function () {
-    cogerUsuarioDelBBDD(['http://danieldawdns.ddns.net/bbdd.php', "http://localhost/bbdd.php"], document.querySelector("#bbdd>input").value)
+    cogerUsuarioDelBBDD(["http://localhost/bbdd.php", 'http://danieldawdns.ddns.net/bbdd.php'], document.querySelector("#bbdd>input").value)
+}
+document.getElementById("guardarBBDD").onclick = function () {
+    guardarUsuarioEnBBDD("http://localhost/bbdd.php")
 }
