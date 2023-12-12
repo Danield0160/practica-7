@@ -108,69 +108,116 @@ formulario = new Formulario()
 
 
 
-function cogerDatoDelServer(urls) {
-    let hecho = false
-    for (const iterator of urls) {
-        let ourRequest = new XMLHttpRequest();
-        ourRequest.open('GET', iterator, true);
-
-        ourRequest.onload = function () {
-            if (ourRequest.status >= 200 && ourRequest.status < 400) {
-                if (!hecho) {
-                    formulario.recuperar(ourRequest.responseText);
-                    hecho = true
-                }
-            } else {
-                console.log("We connected to the server, but it returned an error.");
-            }
-        };
-
-        ourRequest.onerror = function () {
-            console.log("Connection error");
-        };
-
-        ourRequest.send();
-    }
-}
-function cogerUsuarioDelBBDD(urls, dni) {
-    let hecho = false
-    for (const iterator of urls) {
-        let ourRequest = new XMLHttpRequest();
-        ourRequest.open('GET', iterator + "?q=" + dni, true);
-
-        ourRequest.onload = function () {
-            if (ourRequest.status >= 200 && ourRequest.status < 400) {
-                if (!hecho) {
-                    hecho = true
-                    console.log(ourRequest.responseText)
-                    formulario.recuperar(ourRequest.responseText);
-                }
-            } else {
-                console.log("We connected to the server, but it returned an error.");
-            }
-        };
-
-        ourRequest.onerror = function () {
-            console.log("Connection error");
-        };
-
-        ourRequest.send();
+//direccion del server
+urls = {
+    server: {
+        json: 'http://danieldawdns.ddns.net/datos.json',
+        php: 'http://danieldawdns.ddns.net/',
+        bd: 'http://danieldawdns.ddns.net/bbdd.php'
+    },
+    clase: {
+        json: '192.168.216.139/datos.json',
+        php: '192.168.216.139/',
+        bd: '192.168.216.139/bbdd.php'
+    },
+    localhost: {
+        json: "http://localhost/datos.json",
+        php: "http://localhost/",
+        bd: "http://localhost/bbdd.php"
     }
 }
 
-function guardarUsuarioEnBBDD(url) {
+
+
+
+// cojer datos del php o json
+function cogerDatoDelServer(url) {
+    let ourRequest = new XMLHttpRequest();
+    ourRequest.withCredentials = false;
+    ourRequest.open('GET', url, true);
+    // ourRequest.setRequestHeader("Access-Control-Allow-Origin", "*")
+
+    ourRequest.onload = function () {
+        if (ourRequest.status >= 200 && ourRequest.status < 400) {
+            formulario.recuperar(ourRequest.responseText);
+            console.log(this.responseText);
+        } else {
+            console.log("We connected to the server, but it returned an error.");
+        }
+    };
+
+    ourRequest.onerror = function () {
+        console.log("Connection error");
+    };
+
+    ourRequest.send();
+}
+
+//poner dato en el php
+// TODO
+function guardarDatoEnElServer(url) {
     let hijos = [...document.getElementById("formulario").querySelectorAll("#formulario>input")]
+
     let params = ""
     for (const hijo of hijos) {
         params += hijo.id + "=" + hijo.value + "&"
     }
     params = params.slice(0, -1)
+
+    let xhr = new XMLHttpRequest();
+    xhr.withCredentials = false;
+
+
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    xhr.onload = function () {
+        console.log(this.responseText);
+    }
+
+    xhr.send(params);
+}
+
+
+//cojer datos de la bbdd en base al dni
+function cogerUsuarioDelBBDD(url, dni) {
+    let ourRequest = new XMLHttpRequest();
+    ourRequest.withCredentials = true;
+    ourRequest.open('GET', url + "?q=" + dni, true);
+
+    ourRequest.onload = function () {
+        if (ourRequest.status >= 200 && ourRequest.status < 400) {
+            console.log(ourRequest.responseText)
+            formulario.recuperar(ourRequest.responseText);
+        } else {
+            console.log("We connected to the server, but it returned an error.");
+        }
+    };
+
+    ourRequest.onerror = function () {
+        console.log("Connection error");
+    };
+
+    ourRequest.send();
+}
+
+//guarda el usuario en la base de datos
+function guardarUsuarioEnBBDD(url) {
+    let hijos = [...document.getElementById("formulario").querySelectorAll("#formulario>input")]
+
+    let params = ""
+    for (const hijo of hijos) {
+        params += hijo.id + "=" + hijo.value + "&"
+    }
+    params = params.slice(0, -1)
+
     console.log(params)
 
     let xhr = new XMLHttpRequest();
+    ourRequest.withCredentials = true;
 
     xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');//add an HTTP header with setRequestHeader(). Specify the data you want to send in the send() method:
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
     xhr.onload = function () {
         console.log(this.responseText);
@@ -181,30 +228,23 @@ function guardarUsuarioEnBBDD(url) {
 }
 
 
-urls = {
-    casa: {
-        json: 'http://danieldawdns.ddns.net/datos.json',
-        php: 'http://danieldawdns.ddns.net/',
-        bd: 'http://danieldawdns.ddns.net/bbdd.php'
-    },
-    clase: {
-
-    },
-    local: {
-        json: "http://localhost/datos.json",
-        php: "http://localhost/",
-        bd: "http://localhost/bbdd.php"
-    }
-}
 
 
 
 document.getElementById("recuperarJson").onclick = function () {
-    cogerDatoDelServer(['http://danieldawdns.ddns.net/datos.json', "http://localhost/datos.json"])
+    let direccion = document.querySelector('input[name="direccion_server"]:checked').value;
+    cogerDatoDelServer(urls[direccion]["json"])
 }
 document.getElementById("recuperarPhp").onclick = function () {
-    cogerDatoDelServer(['http://danieldawdns.ddns.net/', "http://localhost/"])
+    let direccion = document.querySelector('input[name="direccion_server"]:checked').value;
+    cogerDatoDelServer(urls[direccion]["php"])
 }
+
+document.getElementById("guardarPhp").onclick = function () {
+    let direccion = document.querySelector('input[name="direccion_server"]:checked').value;
+    guardarDatoEnElServer(urls[direccion]["php"])
+}
+
 
 document.getElementById("recuperarBBDD").onclick = function () {
     cogerUsuarioDelBBDD(["http://localhost/bbdd.php", 'http://danieldawdns.ddns.net/bbdd.php'], document.querySelector("#bbdd>input").value)

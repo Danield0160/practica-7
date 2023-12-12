@@ -23,7 +23,12 @@ form{
 p{
     margin-bottom: 0;
 }
-input{
+.radio{
+    display: inline !important ;
+    background-color: bisque !important;
+    
+}
+.formulario{
     border-radius: 10px;
     width: 99%;
     margin-top: 0px;
@@ -34,6 +39,11 @@ input{
 }
 input:focus{
     border: 2px solid yellow;
+}
+
+.radio{
+    margin: 0;
+    margin-right: 20px;
 }
 
 span{ 
@@ -74,7 +84,7 @@ button:active{
 #recuperarJson{
     background-color: yellow;
 }
-#recuperarPhp{
+#recuperarPhp,#guardarPhp{
     background-color: lightblue;
 }
 #recuperarBBDD,#guardarBBDD{
