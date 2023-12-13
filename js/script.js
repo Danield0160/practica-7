@@ -133,14 +133,16 @@ urls = {
 // cojer datos del php o json
 function cogerDatoDelServer(url) {
     let ourRequest = new XMLHttpRequest();
-    ourRequest.withCredentials = false;
     ourRequest.open('GET', url, true);
-    // ourRequest.setRequestHeader("Access-Control-Allow-Origin", "*")
+    ourRequest.withCredentials = true;
+    ourRequest.setRequestHeader("Access-Control-Allow-Origin", "http://127.0.0.1")
+    // ourRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
 
     ourRequest.onload = function () {
         if (ourRequest.status >= 200 && ourRequest.status < 400) {
-            formulario.recuperar(ourRequest.responseText);
             console.log(this.responseText);
+            formulario.recuperar(ourRequest.responseText);
         } else {
             console.log("We connected to the server, but it returned an error.");
         }
@@ -179,11 +181,16 @@ function guardarDatoEnElServer(url) {
 }
 
 
+
+
+
 //cojer datos de la bbdd en base al dni
 function cogerUsuarioDelBBDD(url, dni) {
     let ourRequest = new XMLHttpRequest();
-    ourRequest.withCredentials = true;
     ourRequest.open('GET', url + "?q=" + dni, true);
+    // ourRequest.withCredentials = false;
+    // ourRequest.setRequestHeader("Access-Control-Allow-Origin", "*")
+    ourRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
     ourRequest.onload = function () {
         if (ourRequest.status >= 200 && ourRequest.status < 400) {
@@ -214,7 +221,7 @@ function guardarUsuarioEnBBDD(url) {
     console.log(params)
 
     let xhr = new XMLHttpRequest();
-    ourRequest.withCredentials = true;
+    // ourRequest.withCredentials = true;
 
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -247,7 +254,8 @@ document.getElementById("guardarPhp").onclick = function () {
 
 
 document.getElementById("recuperarBBDD").onclick = function () {
-    cogerUsuarioDelBBDD(["http://localhost/bbdd.php", 'http://danieldawdns.ddns.net/bbdd.php'], document.querySelector("#bbdd>input").value)
+    let direccion = document.querySelector('input[name="direccion_server"]:checked').value;
+    cogerUsuarioDelBBDD(urls[direccion]["bd"],document.querySelector("#bbdd>input").value)
 }
 document.getElementById("guardarBBDD").onclick = function () {
     guardarUsuarioEnBBDD("http://localhost/bbdd.php")

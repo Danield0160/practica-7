@@ -5,10 +5,10 @@ html{
     background: rgb(2,0,36);
     background: radial-gradient(circle, rgba(2,0,36,1) 0%, rgb(50, 50, 158) 20%, rgba(0,212,255,1) 100%);}
 .valido{
-    background-color: rgb(126, 243, 126);
+    background-color: rgb(126, 243, 126) !important;
 }
 .no_valido{
-    background-color: rgb(252, 133, 133);
+    background-color: rgb(252, 133, 133) !important;
 }
 
 form{
@@ -37,7 +37,7 @@ p{
     box-shadow: 3px 3px black,-3px -3px black;
     background-color: rgb(244, 227, 205);
 }
-input:focus{
+.formulario:focus{
     border: 2px solid yellow;
 }
 
